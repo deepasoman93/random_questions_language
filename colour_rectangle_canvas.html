@@ -1,0 +1,120 @@
+<html>
+<body>
+
+<canvas id="myCanvas" width="300" height="150" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<script>
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+
+// Red rectangle
+ctx.beginPath();
+ctx.lineWidth = "2";
+ctx.strokeStyle = "red";
+ctx.rect(5, 5, 290, 140); 
+ctx.stroke();
+
+// brown rectangle
+ctx.beginPath();
+ctx.lineWidth = "2";
+ctx.strokeStyle = "brown";
+ctx.rect(60, 30, 120, 70);
+ctx.stroke();
+
+// green rectangle
+ctx.beginPath();
+ctx.lineWidth = "2";
+ctx.strokeStyle = "green";
+ctx.rect(130, 60, 40, 20);
+ctx.stroke();
+
+// blue rectangle
+ctx.beginPath();
+ctx.lineWidth = "2";
+ctx.strokeStyle = "blue";
+ctx.rect(150, 110, 60, 20);
+ctx.stroke();
+    
+var canvasOffset=$("#canvas").offset();
+var offsetX=canvasOffset.left;
+var offsetY=canvasOffset.top;
+
+$(function(){
+
+    //
+    var rect = (function () {
+
+        // constructor
+        function rect(id,x,y,width,height,fill,stroke,strokewidth) {
+            this.x=x;
+            this.y=y;
+            this.id=id;
+            this.width=width;
+            this.height=height;
+            this.fill=fill||"gray";
+            this.stroke=stroke||"blue";
+            this.strokewidth=strokewidth||2;
+            this.redraw(this.x,this.y);
+            return(this);
+        }
+        //
+        rect.prototype.redraw = function(x,y){
+            this.x=x;
+            this.y=y;
+            ctx.save();
+            ctx.beginPath();
+            ctx.fillStyle=this.fill;
+            ctx.strokeStyle=this.stroke;
+            ctx.lineWidth=this.strokewidth;
+            ctx.rect(x,y,this.width,this.height);
+            ctx.stroke();
+            ctx.fill();
+            ctx.restore();
+            return(this);
+        }
+        //
+        rect.prototype.isPointInside = function(x,y){
+            return( x>=this.x 
+                    && x<=this.x+this.width
+                    && y>=this.y
+                    && y<=this.y+this.height);
+        }
+
+
+        return rect;
+    })();
+
+
+    //
+    function handleMouseDown(e){
+      mouseX=parseInt(e.clientX-offsetX);
+      mouseY=parseInt(e.clientY-offsetY);
+
+      // Put your mousedown stuff here
+      var clicked="";
+      for(var i=0;i<rects.length;i++){
+          if(rects[i].isPointInside(mouseX,mouseY)){
+              clicked+=rects[i].id+" "
+          }
+      }
+      if(clicked.length>0){ alert("Clicked rectangles: "+clicked); }
+    }
+
+
+    //
+    var rects=[];
+    //
+    rects.push(new rect("Red-Rectangle",15,35,65,60,"red","black",3));
+    rects.push(new rect("Green-Rectangle",60,80,70,50,"green","black",6));
+    rects.push(new rect("Blue-Rectangle",125,25,10,10,"blue","black",3));
+
+    //
+    $("#canvas").click(handleMouseDown);
+
+
+}); // end $(function(){});
+</script>
+
+</body>
+</html>

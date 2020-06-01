@@ -1,0 +1,17 @@
+import string
+x, y = input("Enter a two values saperated by ;: ").split(';') 
+print("m1: ", x)
+m1=x
+print("m2 : ", y) 
+m2=y
+
+if (type(m1)==type(m2)):
+    s = input("Expression you want to perform")
+    symbols = '^*()/+-'
+    formula = [(x,s.index(x)) for x in s if x in string.digits+symbols]
+    result = eval(''.join(x[0] for x in formula), {'__builtins__':None})
+    s = s[:formula[0][1]] + str(result) + s[formula[-1][1]+1:]
+    print(s)
+    
+else:
+    print('Error.Datatype mismatch.')
